@@ -69,7 +69,8 @@ class RegisterScreen extends Component {
             <FormInput type="text" name="lastName" id="lastName" onChange={this.handleChange} />
           </FormGroup>
           <FormGroup>
-            <FormCheckbox name="admin" id="admin" onClick={this.handleChecked}>Administrator?</FormCheckbox>
+            <label htmlFor="admin">Administrator?</label>
+            <FormCheckbox type="checkbox" name="admin" id="admin" onClick={this.handleChecked}></FormCheckbox>
           </FormGroup>
           <FormGroup>
             <button type="submit" className="btn pink lighten-1 z-depth-0">Sign Up</button>
