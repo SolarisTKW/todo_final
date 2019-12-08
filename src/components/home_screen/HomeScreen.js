@@ -5,11 +5,55 @@ import { NavLink, Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
 import WireframeLinks from './WireframeLinks'
 import { getFirestore } from 'redux-firestore';
+import { Button, Row, Col, Container, Modal, ModalHeader, ModalBody, Form, FormInput } from 'shards-react';
 
 class HomeScreen extends Component {
 state = {
-    mostRecent: undefined,
+    show: false,
+    name: "",
 }
+
+    registerRecent = (id) =>
+    {
+        var x = new Date;
+        var firestore = getFirestore();
+        firestore.collection('wireframeItems').doc(id).update(
+            {
+                time: x.getTime()
+            }
+        );
+    }
+
+    toggleModal = () =>
+    {
+        this.setState({show: !this.state.show});
+    }
+
+    handleChange = (e) =>
+    {
+        const { target } = e;
+
+        this.setState(state => ({
+        ...state,
+        [target.id]: target.value,
+        }));
+
+    }
+
+    handleSubmit = () =>
+    {
+        var x = new Date;
+        var firestore = getFirestore();
+        const collection = firestore.collection('wireframeItems');
+        collection.add(
+            {
+                key: this.props.wireframes.length,
+                name: this.state.name,
+                elements: [],
+                time: x.getTime()
+            }
+        );
+    }
 
     render() {
         if (!this.props.auth.uid) {
@@ -23,17 +67,33 @@ state = {
                         <WireframeLinks handleRegister={this.registerRecent}/>
                     </div>
 
+                    <Modal open={this.state.show} toggle={this.toggle}>
+                        <ModalHeader>Create a new Wireframe</ModalHeader>
+                        <ModalBody>
+                            <Form onSubmit={this.handleSubmit}>
+                                <label htmlFor="name">Name</label>
+                                <FormInput type="text" name="name" id="name" onChange={this.handleChange}/>
+                                <Button type="submit" theme="primary">Submit</Button>
+                            </Form>
+                        </ModalBody>
+                    </Modal>
+
                     <div className="col s8">
                         <div className="banner">
                             @Wireframe<br />
                             Maker
                         </div>
-                        
-                        <div className="center-align home_new_list_container">
-                                <button className="home_new_list_button" onClick={this.handleNewList}>
-                                    Create a New To Do List
-                                </button>
-                        </div>
+                        <Container>
+                            <Row>
+                                <Col>
+                                    <div className="center-align home_new_wireframe_container">
+                                        <Button outline theme="danger" className="home_new_wireframe_button" onClick={this.toggleModal}>
+                                            Create a New Wireframe
+                                        </Button>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Container>
                     </div>
                 </div>
                 
