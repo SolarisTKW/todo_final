@@ -32,6 +32,10 @@ div.banner {
   padding-bottom: 5%;
 }
 
+hr.new2 {
+  border-top: 1px dashed rgb(192, 203, 214);
+}
+
 .home_new_list_button {
   font-size: 32pt;
 }
@@ -50,6 +54,15 @@ div.banner {
   font-family:Roboto Mono,monospace
 }
 
+.color_picker_circle{
+  font-size: 8px;
+  color: #FFFFFF;
+}
+
+.color_picker_container{
+  color: #FFFFFF
+}
+
 .zoom_bar{
   font-size: 20pt;
 }
@@ -59,4 +72,45 @@ div.banner {
   text-align: center;
   padding-top: 7px;
 }
+
+.label_for_sample{
+  color: black;
+  font-weight: bold;
+}
+
+.sample_wrapper{
+  position: relative;
+  width: 100%;
+  height: 150px;
+  padding-bottom: 50px;
+}
+
+.sample_wrapper_label{
+  position: relative;
+  width: 100%;
+  height: 80px;
+  padding-bottom: 50px;
+}
+
+.sample_wrapper_button{
+  position: relative;
+  width: 100%;
+  height: 80px;
+  padding-bottom: 50px;
+}
+
+.sample_container.container{
+  max-width: 60%;
+  height: 100%;
+  border: 1px solid #000000;
+  border-radius:20%;
+}
+
+.sample_label{
+  font-weight: bold;
+  color: #000000;
+}
+
+.sample_button{
   
+}

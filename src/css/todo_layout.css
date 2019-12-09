@@ -43,7 +43,7 @@ form button, form h5 {
 
 .edit_panel {
   position: relative;
-  height: 1000px;
+  height: 850px;
 }
 
 .zoom_bar {
@@ -51,13 +51,41 @@ form button, form h5 {
   height: 50px;
 }
 
+.color_picker_container{
+  padding: 15px;
+}
+
+.color_picker_circle{
+  position: absolute;
+  left: 80%;
+}
+
+.color_picker{
+  position: absolute;
+  z-index:1000;
+  left: 50%;
+}
+
 .container {
   width: 100%;
 }
 
+/* label.label_for_sample{
+  position: relative;
+  height: 70%;
+} */
 
+.container.sample_container{
+  max-width: 65%;
+  height: 10%;
+  border: 1px solid #000000;
+  border-radius:15%;
+}
 
-
+button.sample_button{
+  max-width: 65%;
+  height: 30%;
+}
 
 input[type=text]:not(.browser-default):focus:not([readonly]),
 input[type=email]:not(.browser-default):focus:not([readonly]),
