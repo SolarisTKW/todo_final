@@ -42,7 +42,7 @@ state = {
 
     handleSubmit = () =>
     {
-        var x = new Date;
+        var x = new Date();
         var firestore = getFirestore();
         const collection = firestore.collection('wireframeItems');
         collection.add(
@@ -67,7 +67,7 @@ state = {
                         <WireframeLinks handleRegister={this.registerRecent}/>
                     </div>
 
-                    <Modal open={this.state.show} toggle={this.toggle}>
+                    <Modal open={this.state.show} toggle={this.toggleModal}>
                         <ModalHeader>Create a new Wireframe</ModalHeader>
                         <ModalBody>
                             <Form onSubmit={this.handleSubmit}>

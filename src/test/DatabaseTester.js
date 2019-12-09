@@ -21,7 +21,7 @@ class DatabaseTester extends React.Component {
 
     handleReset = () => {
         const fireStore = getFirestore();
-        let x = new Date;
+        let x = new Date();
         console.log(x.getDate());
         todoJson.wireframeItems.forEach(wireframeItem => {
             fireStore.collection('wireframeItems').add({

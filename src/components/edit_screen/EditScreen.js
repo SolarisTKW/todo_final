@@ -4,41 +4,72 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
-import { FormInput, Button } from "shards-react";
+import { FormInput, Button, Container, Col, Row , Card} from "shards-react";
 import { Link } from 'react-router-dom';
 
 class EditScreen extends Component {
     state = {
-        name: '',
-        owner: '',
         criteria: "",
     }
 
     render() {
         const auth = this.props.auth;
-        const todoList = this.props.todoList;
+        const wireframe = this.props.wireframe;
         if (!auth.uid) {
             return <Redirect to="/" />;
         }
 
-        if(!todoList)
-	        return <React.Fragment />;
+        // if(!wireframe)
+	    //     return <React.Fragment />;
 
         return (
-            <div className="container">
-
-                <div className="row white">
-                    
-                    <div className="card-panel">
-
-                        <label htmlFor="name">Name</label>
-                        <FormInput className="validate" type="text" name="name" id="name" onChange={this.handleChange} placeholder={todoList.name}/>
-
-                    </div>
-                    
-                </div>
-        
-            </div>
+            <Container className="edit_container">
+                <Row>
+                    <Col center sm = "3" md="3" lg="3" >
+                        <Card className="edit_panel">
+                            <Container className="zoom_bar">
+                                <Row>
+                                    <Col center sm = "2" md="2" lg="2">
+                                        <div className="zoom_bar">
+                                            <i className="material-icons">zoom_in</i>
+                                        </div>
+                                    </Col>
+                                    <Col center sm = "2" md="2" lg="2">
+                                        <div className="zoom_bar">
+                                            <i className="material-icons">zoom_out</i>
+                                        </div>
+                                    </Col>
+                                    <Col center sm = "4" md="4" lg="4">
+                                        <div className="zoom_bar_text">
+                                            Save
+                                        </div>
+                                    </Col>
+                                    <Col center sm = "4" md="4" lg="4">
+                                        <div className="zoom_bar_text">
+                                            Close
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Container>
+                            1/3
+                        </Card>
+                    </Col>
+                    <Col center sm = "6" md="6" lg="6" >
+                        <Container className="edit_panel">
+                            2/3
+                        </Container>
+                    </Col>
+                    <Col center sm = "3" md="3" lg="3" >
+                        <Card className="edit_panel">
+                            <label>Properties</label>
+                            <FormInput name="name" id="id" placeholder="Name"></FormInput>
+                            <label htmlFor="font_size">Font Size:</label>
+                            <FormInput name="font_size" id="font_size" placeholder="10px"></FormInput>
+                            3/3
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
         );
     }
 }

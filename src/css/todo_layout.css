@@ -14,9 +14,11 @@ body {
 }
 
 body {
-  position: absolute;
+  position: relative;
   width: 80%;
   left: 10%;
+  /* width: 100%;
+  left: 0%; */
   top: 5%;
 }
 
@@ -35,12 +37,27 @@ form button, form h5 {
   margin: 20px 0;
 }
 
-/* form button {
-  position: absolute;
-  width: 10%;
-  left: 90%;
-  top: 70%;
-} */
+.row {
+  position: relative;
+}
+
+.edit_panel {
+  position: relative;
+  height: 1000px;
+}
+
+.zoom_bar {
+  position: relative;
+  height: 50px;
+}
+
+.container {
+  width: 100%;
+}
+
+
+
+
 
 input[type=text]:not(.browser-default):focus:not([readonly]),
 input[type=email]:not(.browser-default):focus:not([readonly]),

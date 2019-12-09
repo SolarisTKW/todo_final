@@ -14,7 +14,10 @@ class WireframeLinks extends React.Component {
             <div className="todo-lists section">
                 {wireframes && wireframes.map(wireframe => (
                     
-                    <Link to={'/wireframe/' + wireframe.id} key={wireframe.id}>
+                    <Link to={{
+                        pathname: '/wireframe/' + wireframe.id,
+                        state: {show: false}
+                        }}>
                         <WireframeCard wireframe={wireframe} handleRegister = {this.props.handleRegister}/>
                     </Link>
                 ))}

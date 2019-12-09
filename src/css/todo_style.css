@@ -38,3 +38,25 @@ div.banner {
 .home_new_list_button:hover {
   box-shadow: 1px 2px;
 }
+
+.edit_container [class*=col]
+{
+  /* border:1px solid #dde7ee; */
+  text-align: center;
+  /* padding:15px 5px; */
+  /* font-size:10px; */
+  color:#5080a0;
+  font-weight:400;
+  font-family:Roboto Mono,monospace
+}
+
+.zoom_bar{
+  font-size: 20pt;
+}
+
+.zoom_bar_text{
+  font-size: 10pt;
+  text-align: center;
+  padding-top: 7px;
+}
+  
