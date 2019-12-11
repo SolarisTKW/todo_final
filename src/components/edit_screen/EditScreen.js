@@ -5,14 +5,16 @@ import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
 import { FormInput, Button, Container, Col, Row , Card} from "shards-react";
-import { PhotoshopPicker } from 'react-color';
+import { SketchPicker } from 'react-color';
 
 class EditScreen extends Component {
     state = {
+        type: "button",
         showColorPickerBackground: false,
         showColorPickerBorder: false,
         backgroundColor: "#000000",
         borderColor: "#f0f",
+        fontColor: "#000000",
         criteria: "",
     }
 
@@ -32,6 +34,38 @@ class EditScreen extends Component {
         )
     }
 
+    setShowFontColor = () => {
+        this.setState(
+            {
+                showColorPickerFont: !this.state.showColorPickerFont
+            }
+        )
+    }
+
+    handleChangeCompleteBackground = (color) => {
+        this.setState(
+            {
+                backgroundColor: color.hex
+            }
+        );
+    }
+
+    handleChangeCompleteBorder = (color) => {
+        this.setState(
+            {
+                borderColor: color.hex
+            }
+        );
+    }
+
+    handleChangeCompleteFont = (color) => {
+        this.setState(
+            {
+                fontColor: color.hex
+            }
+        );
+    }
+
     render() {
         const auth = this.props.auth;
         const wireframe = this.props.wireframe;
@@ -45,7 +79,7 @@ class EditScreen extends Component {
         return (
             <Container className="edit_container">
                 <Row>
-                    <Col center sm = "3" md="3" lg="3" >
+                    <Col center sm = "2" md="2" lg="2" className="edit_col">
                         <Card className="edit_panel">
                             <Container className="zoom_bar">
                                 <Row>
@@ -111,74 +145,165 @@ class EditScreen extends Component {
                                 </label>
                             </div>
 
-                            
-
                             1/3
                         </Card>
                     </Col>
-                    <Col center sm = "6" md="6" lg="6" >
+
+                    <Col center sm = "8" md="8" lg="8" className="edit_col">
                         <Container className="edit_panel">
                             2/3
                         </Container>
                     </Col>
-                    <Col center sm = "3" md="3" lg="3" >
-                        <Card className="edit_panel">
-                            <div className="input_container">
-                                <label>Properties</label>
-                                <FormInput name="name" id="id" placeholder="Name"></FormInput>
-                            </div>
 
-                            <hr className="new2"/>
+                    <Col center sm = "2" md="2" lg="2" className="edit_col">
+                        {(()=> {
+                            switch(this.state.type){
+                                case 'container':
+                                    return(
+                                        <Card className="edit_panel">
 
-                            <div className="input_container">
-                                <label htmlFor="font_size">Font Size:</label>
-                                <FormInput name="font_size" id="font_size" placeholder="10"></FormInput>
-                            </div>
-                            
-                            <hr className="new2"/>
+                                            <div className="input_container">
+                                                <div className="color_picker_container">
+                                                    <label htmlFor="color_picker_circle" className="grey-text color_picker_circle_label">Background: </label>
+                                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.backgroundColor, color: "#FFFFFF"}} onClick={this.setShowBackground}>{this.state.backgroundColor}</div>
+                                                    <div>{
+                                                        this.state.showColorPickerBackground ?
+                                                        <SketchPicker
+                                                        color={this.state.backgroundColor}
+                                                        onChangeComplete={this.handleChangeCompleteBackground}
+                                                        className="color_picker"/> : null
+                                                    }
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                            <div className="input_container">
-                                <div className="color_picker_container">
-                                    <label htmlFor="color_picker_circle" className="grey-text color_picker_circle_label">Background: </label>
-                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.backgroundColor, color: "#FFFFFF"}} onClick={this.setShowBackground}>{this.state.backgroundColor}</div>
-                                    <div>{
-                                        this.state.showColorPickerBackground ?
-                                        <PhotoshopPicker className="color_picker"/> : null
-                                    }
-                                    </div>
-                                </div>
-                            </div>
+                                            <hr className="new2"/>
 
-                            <hr className="new2"/>
+                                            <div className="input_container">
+                                                <div className="color_picker_container">
+                                                    <label htmlFor="color_picker_circle" className="grey-text color_picker_circle_label">Border Color: </label>
+                                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.borderColor, color: "#FFFFFF"}} onClick={this.setShowBorder}>{this.state.borderColor}</div>
+                                                    <div>{
+                                                        this.state.showColorPickerBorder ?
+                                                        <SketchPicker
+                                                        color={this.state.borderColor}
+                                                        onChangeComplete={this.handleChangeCompleteBorder}
+                                                        className="color_picker"/> : null
+                                                    }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <hr className="new2"/>
 
-                            <div className="input_container">
-                                <div className="color_picker_container">
-                                    <label htmlFor="color_picker_circle" className="grey-text color_picker_circle_label">Border Color: </label>
-                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.borderColor, color: "#FFFFFF"}} onClick={this.setShowBorder}>{this.state.borderColor}</div>
-                                    <div>{
-                                        this.state.showColorPickerBorder ?
-                                        <PhotoshopPicker className="color_picker"/> : null
-                                    }
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <hr className="new2"/>
+                                            <div className="input_container">
+                                                <label htmlFor="border_thickness">Border Thickness:</label>
+                                                <FormInput name="border_thickness" id="border_thickness" placeholder="10"></FormInput>
+                                            </div>
 
-                            <div className="input_container">
-                                <label htmlFor="border_thickness">Border Thickness:</label>
-                                <FormInput name="border_thickness" id="border_thickness" placeholder="10"></FormInput>
-                            </div>
+                                            <hr className="new2"/>
 
-                            <hr className="new2"/>
+                                            <div className="input_container">
+                                                <label htmlFor="border_radius">Border Radius:</label>
+                                                <FormInput name="border_radius" id="border_radius" placeholder="10"></FormInput>
+                                            </div>
+                                            
+                                            Container
+                                        </Card>
+                                    );
+                                case null:
+                                    return(
+                                        <Card className="edit_panel">
+                                            <h5>Select an existing control!</h5>
+                                        </Card>    
+                                    );
+                                default:
+                                    return(
+                                        <Card className="edit_panel">
+                                            <div className="input_container">
+                                                <label>Properties</label>
+                                                <FormInput name="name" id="id" placeholder="Name"></FormInput>
+                                            </div>
 
-                            <div className="input_container">
-                                <label htmlFor="border_radius">Border Radius:</label>
-                                <FormInput name="border_radius" id="border_radius" placeholder="10"></FormInput>
-                            </div>
-                            
-                            3/3
-                        </Card>
+                                            <hr className="new2"/>
+
+                                            <div className="input_container">
+                                                <label htmlFor="font_size">Font Size:</label>
+                                                <FormInput name="font_size" id="font_size" placeholder="10"></FormInput>
+                                            </div>
+                                            
+                                            <hr className="new2"/>
+
+                                            <div className="input_container">
+                                                <div className="color_picker_container">
+                                                    <label htmlFor="color_picker_circle" className="grey-text color_picker_circle_label">Font Color: </label>
+                                                    <div className={"btn-floating color_picker_circle"} style={{color: this.state.fontColor, backgroundColor: "#FFFFFF"}} onClick={this.setShowFontColor}>{this.state.fontColor}</div>
+                                                    <div>{
+                                                        this.state.showColorPickerFont ?
+                                                        <SketchPicker
+                                                        color={this.state.fontColor}
+                                                        onChangeComplete={this.handleChangeCompleteFont}
+                                                        className="color_picker"/> : null
+                                                    }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <hr className="new2"/>
+
+                                            <div className="input_container">
+                                                <div className="color_picker_container">
+                                                    <label htmlFor="color_picker_circle" className="grey-text color_picker_circle_label">Background: </label>
+                                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.backgroundColor, color: "#FFFFFF"}} onClick={this.setShowBackground}>{this.state.backgroundColor}</div>
+                                                    <div>{
+                                                        this.state.showColorPickerBackground ?
+                                                        <SketchPicker
+                                                        color={this.state.backgroundColor}
+                                                        onChangeComplete={this.handleChangeCompleteBackground}
+                                                        className="color_picker"/> : null
+                                                    }
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr className="new2"/>
+
+                                            <div className="input_container">
+                                                <div className="color_picker_container">
+                                                    <label htmlFor="color_picker_circle" className="grey-text color_picker_circle_label">Border Color: </label>
+                                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.borderColor, color: "#FFFFFF"}} onClick={this.setShowBorder}>{this.state.borderColor}</div>
+                                                    <div>{
+                                                        this.state.showColorPickerBorder ?
+                                                        <SketchPicker
+                                                        color={this.state.borderColor}
+                                                        onChangeComplete={this.handleChangeCompleteBorder}
+                                                        className="color_picker"/> : null
+                                                    }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <hr className="new2"/>
+
+                                            <div className="input_container">
+                                                <label htmlFor="border_thickness">Border Thickness:</label>
+                                                <FormInput name="border_thickness" id="border_thickness" placeholder="10"></FormInput>
+                                            </div>
+
+                                            <hr className="new2"/>
+
+                                            <div className="input_container">
+                                                <label htmlFor="border_radius">Border Radius:</label>
+                                                <FormInput name="border_radius" id="border_radius" placeholder="10"></FormInput>
+                                            </div>
+                                            
+                                            Textual
+                                        </Card>    
+                                    );
+                                }
+
+                            }
+                            )()}
                     </Col>
                 </Row>
             </Container>

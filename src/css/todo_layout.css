@@ -41,6 +41,11 @@ form button, form h5 {
   position: relative;
 }
 
+.edit_col {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
 .edit_panel {
   position: relative;
   height: 850px;
@@ -57,7 +62,7 @@ form button, form h5 {
 
 .color_picker_circle{
   position: absolute;
-  left: 80%;
+  left: 75%;
 }
 
 .color_picker{
@@ -68,6 +73,8 @@ form button, form h5 {
 
 .container {
   width: 100%;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
 }
 
 /* label.label_for_sample{
