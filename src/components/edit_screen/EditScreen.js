@@ -6,6 +6,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
 import { FormInput, Button, Container, Col, Row , Card} from "shards-react";
 import { SketchPicker } from 'react-color';
+import DraggableContainer from './DraggableContainer.js';
 
 class EditScreen extends Component {
     state = {
@@ -152,6 +153,7 @@ class EditScreen extends Component {
                     <Col center sm = "8" md="8" lg="8" className="edit_col">
                         <Container className="edit_panel">
                             2/3
+                            <DraggableContainer/>
                         </Container>
                     </Col>
 
