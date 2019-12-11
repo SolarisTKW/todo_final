@@ -7,6 +7,9 @@ import { getFirestore } from 'redux-firestore';
 import { FormInput, Button, Container, Col, Row , Card} from "shards-react";
 import { SketchPicker } from 'react-color';
 import DraggableContainer from './DraggableContainer.js';
+import DraggableButton from './DraggableButton.js';
+import DraggableLabel from './DraggableLabel.js';
+import DraggableTextfield from './DraggableTextfield.js';
 
 class EditScreen extends Component {
     state = {
@@ -118,10 +121,10 @@ class EditScreen extends Component {
                             </div>
 
                             <div className="sample_wrapper_label">
-                                <label htmlFor="sample_label" className="black-text label">
+                                <label htmlFor="sample_label" className="black-text label_for_sample">
                                     Prompt for Input:
                                 </label>
-                                <div className="sample_label" className="sample_label">
+                                <div className="sample_label">
                                     Label
                                 </div>
                             </div>
@@ -154,6 +157,7 @@ class EditScreen extends Component {
                         <Container className="edit_panel">
                             2/3
                             <DraggableContainer/>
+                            <DraggableButton/>
                         </Container>
                     </Col>
 
@@ -316,7 +320,7 @@ class EditScreen extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { id } = ownProps.match.params;
   const { wireframes } = state.firestore.data;
-  const wireframe = wireframes ? wireframe[id] : null;
+  const wireframe = wireframes ? wireframes[id] : null;
   if(wireframe)
 	wireframe.id = id;
 
