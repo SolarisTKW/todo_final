@@ -118,3 +118,13 @@ hr.new2 {
 .sample_button{
   
 }
+
+.save_and_close
+{
+  margin-right: 100px
+}
+
+.cancel
+{
+  position:relative;
+}

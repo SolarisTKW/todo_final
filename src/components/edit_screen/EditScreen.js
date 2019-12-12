@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
-import { FormInput, Button, Container, Col, Row , Card} from "shards-react";
+import { FormInput, Button, Container, Col, Row , Card, Modal, ModalHeader, ModalBody} from "shards-react";
 import { SketchPicker } from 'react-color';
-import DraggableContainer from './DraggableContainer.js';
-import DraggableButton from './DraggableButton.js';
-import DraggableLabel from './DraggableLabel.js';
-import DraggableTextfield from './DraggableTextfield.js';
+import WireframeCanvas from './WireframeCanvas.js';
 
 class EditScreen extends Component {
     state = {
+        saved: false,
+        showModal: false,
         type: "button",
         showColorPickerBackground: false,
         showColorPickerBorder: false,
@@ -20,6 +19,52 @@ class EditScreen extends Component {
         borderColor: "#f0f",
         fontColor: "#000000",
         criteria: "",
+    }
+
+    handleZoomIn = () => {
+
+    }
+
+    handleZoomOut = () => {
+
+    }
+
+    handleClose = (e) => {
+        if(!this.state.saved)
+        {
+            e.preventDefault();
+            
+            this.setState(
+                {
+                    showModal: true
+                }
+            )
+        }
+    }
+
+    handleSave = () => {
+
+    }
+
+    handleSaveAndClose = () =>
+    {
+        //Saving code
+
+        //Close code
+        this.setState(
+            {
+                showModal: false
+            }
+        );
+    }
+
+    handleCancel = () =>
+    {
+        this.setState(
+            {
+                showModal: false
+            }
+        );
     }
 
     setShowBackground = () => {
@@ -82,6 +127,22 @@ class EditScreen extends Component {
 
         return (
             <Container className="edit_container">
+                <Modal open={this.state.showModal}>
+                    <ModalHeader>
+                        Are you sure you want to quit without saving?
+                    </ModalHeader>
+                    <ModalBody>
+                        <Button className="save_and_close" onClick={this.handleSaveAndClose}> 
+                            <Link to="/">
+                                Save and Close
+                            </Link>
+                        </Button>
+                        <Button className="cancel" theme="danger" onClick={this.handleCancel}>
+                            Cancel
+                        </Button>
+                    </ModalBody>
+                </Modal>
+
                 <Row>
                     <Col center sm = "2" md="2" lg="2" className="edit_col">
                         <Card className="edit_panel">
@@ -98,13 +159,15 @@ class EditScreen extends Component {
                                         </div>
                                     </Col>
                                     <Col center sm = "4" md="4" lg="4">
-                                        <div className="zoom_bar_text">
+                                        <div className="zoom_bar_text" onClick={this.handleSave}>
                                             Save
                                         </div>
                                     </Col>
                                     <Col center sm = "4" md="4" lg="4">
                                         <div className="zoom_bar_text">
-                                            Close
+                                            <Link to="/" onClick={this.handleClose}>
+                                                Close
+                                            </Link>
                                         </div>
                                     </Col>
                                 </Row>
@@ -154,11 +217,7 @@ class EditScreen extends Component {
                     </Col>
 
                     <Col center sm = "8" md="8" lg="8" className="edit_col">
-                        <Container className="edit_panel">
-                            2/3
-                            <DraggableContainer/>
-                            <DraggableButton/>
-                        </Container>
+                        <WireframeCanvas/>
                     </Col>
 
                     <Col center sm = "2" md="2" lg="2" className="edit_col">

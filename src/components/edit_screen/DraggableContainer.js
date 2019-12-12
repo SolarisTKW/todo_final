@@ -19,6 +19,7 @@ class DraggableContainer extends React.Component {
                 borderWidth: "1px",
                 borderColor: "#000000",
                 borderRadius: 10,
+                borderWidth: 1,
               }}
               bounds="parent"
             >

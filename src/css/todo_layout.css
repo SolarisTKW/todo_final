@@ -77,11 +77,6 @@ form button, form h5 {
   padding-right: 0px !important;
 }
 
-/* label.label_for_sample{
-  position: relative;
-  height: 70%;
-} */
-
 .container.sample_container{
   max-width: 65%;
   height: 10%;
@@ -92,6 +87,16 @@ form button, form h5 {
 button.sample_button{
   max-width: 65%;
   height: 30%;
+}
+
+.save_and_close
+{
+  position:relative;
+}
+
+.cancel
+{
+  position:relative;
 }
 
 input[type=text]:not(.browser-default):focus:not([readonly]),

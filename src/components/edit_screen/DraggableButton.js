@@ -5,41 +5,27 @@ import { compose } from 'redux';
 import { Rnd } from 'react-rnd';
 
 class DraggableButton extends React.Component {
-
-    state={
-        selected: false,
-        width: 200,
-        height: 100,
-        x: 0,
-        y: 0,
-        name: "Submit",
-        fontSize: 10,
-        backgroundColor: "#FFFFFF",
-        borderColor: "#000000",
-        fontColor: "#000000",
-        borderRadius: 5,
-        borderThickness: 0,
-    }
-
-    selectedSquares = () =>
-    {   
-        if(this.state.selected)
-        {
-            console.log("SELECTED");
-            return(
-                {
-                    borderThickness: 10,
-                }
-            );
-        }
-        else
-        {
-            console.log("UNSELECTED");
-            return(
-                {
-                    borderThickness: 0,
-                }
-            );
+    constructor()
+    {
+        super();
+        
+        this.state = {
+            selected: false,
+            data:
+            {
+                type: "Button",
+                text: "Submit",
+                width: 75,
+                height: 40,
+                x: 0,
+                y: 0,
+                fontSize: 10,
+                backgroundColor: "#FFFFFF",
+                borderColor: "#000000",
+                fontColor: "#000000",
+                borderRadius: 5,
+                borderThickness: 3
+            }
         }
     }
     
@@ -55,6 +41,18 @@ class DraggableButton extends React.Component {
         }
     }
 
+    handleClickOff = () =>
+    {  
+        if(this.state.selected === true)
+        {
+            this.setState(
+                {
+                    selected: false
+                }
+            );
+        }
+    }
+
     handleDragStart = () => 
     {
 
@@ -62,7 +60,22 @@ class DraggableButton extends React.Component {
 
     handleDragStop = (e,d) =>
     {
-        this.setState({ x: d.x, y: d.y });
+        this.setState({ 
+            data:{
+                    type: this.state.data.type,
+                    text: this.state.data.text,
+                    width: this.state.data.width,
+                    height: this.state.data.height,
+                    x: d.x,
+                    y: d.y,
+                    fontSize: this.state.data.fontSize,
+                    backgroundColor: this.state.data.backgroundColor,
+                    borderColor: this.state.data.borderColor,
+                    fontColor: this.state.data.fontColor,
+                    borderRadius: this.state.data.borderRadius,
+                    borderThickness: this.state.data.borderThickness
+                }
+        });
     }
 
     handleResize = (e, direction, ref, delta, position) =>
@@ -70,10 +83,20 @@ class DraggableButton extends React.Component {
         if(this.state.selected)
         {
             this.setState({
-                width: ref.style.width,
-                height: ref.style.height,
-                ...position,
-                });
+                data:{
+                        type: this.state.data.type,
+                        text: this.state.data.text,
+                        width: ref.style.width,
+                        height: ref.style.height,
+                        ...position,
+                        fontSize: this.state.data.fontSize,
+                        backgroundColor: this.state.data.backgroundColor,
+                        borderColor: this.state.data.borderColor,
+                        fontColor: this.state.data.fontColor,
+                        borderRadius: this.state.data.borderRadius,
+                        borderThickness: this.state.data.borderThickness
+                    }
+            });
         }
     }
 
@@ -82,8 +105,8 @@ class DraggableButton extends React.Component {
             <Rnd default={{
                 x: 0,
                 y: 0,
-                width: 200,
-                height: 100,
+                width: 75,
+                height: 40,
               }}
               
               style = {this.state.selected ? 
@@ -96,7 +119,8 @@ class DraggableButton extends React.Component {
                     }
                 }
 
-              bounds="parent"
+              bounds="parent" 
+
               onResize={this.handleResize}
               onClick={this.handleClick}
               disableDragging={!this.state.selected}
@@ -127,30 +151,75 @@ class DraggableButton extends React.Component {
             >
                 <button
                     style={{
-                        width: this.state.width,
-                        height: this.state.height,
-                        fontSize: this.state.fontSize,
-                        backgroundColor: this.state.backgroundColor,
-                        borderColor: this.state.borderColor,
-                        color: this.state.fontColor,
-                        borderThickness: this.state.borderThickness,
-                        borderRadius: this.state.borderRadius,
+                        width: this.state.data.width,
+                        height: this.state.data.height,
+                        fontSize: this.state.data.fontSize,
+                        backgroundColor: this.state.data.backgroundColor,
+                        borderColor: this.state.data.borderColor,
+                        color: this.state.data.fontColor,
+                        borderWidth: this.state.data.borderThickness,
+                        borderRadius: this.state.data.borderRadius,
+                        border: "solid"
                     }}
-                    
                 >
-                    {this.state.name}
+                    {this.state.data.text}
                 </button>
+                
+                {/*Squares for resizing*/}
+                <span 
+                style={{visibility: this.state.selected ? "visible":"hidden"}}>
+                    <div 
+                        className="bottom_left_square" 
+                        style={{
+                            position: "absolute",
+                            userSelect: "none",
+                            width: 20, 
+                            height: 20, 
+                            left: -10, 
+                            bottom: -10,
+                            backgroundColor: "#f0f", 
+                        }}
+                    />
+                    <div 
+                        className="bottom_right_square" 
+                        style={{
+                            position: "absolute",
+                            userSelect: "none",
+                            width: 20, 
+                            height: 20, 
+                            right: -10, 
+                            bottom: -10,
+                            backgroundColor: "#f0f", 
+                        }}
+                    />
+                    <div 
+                        className="top_left_square" 
+                        style={{
+                            position: "absolute",
+                            userSelect: "none",
+                            width: 20, 
+                            height: 20, 
+                            left: -10, 
+                            top: -10,
+                            backgroundColor: "#f0f", 
+                        }}
+                    />
+                    <div 
+                        className="top_right_square" 
+                        style={{
+                            position: "absolute",
+                            userSelect: "none",
+                            width: 20, 
+                            height: 20, 
+                            right: -10, 
+                            top: -10,
+                            backgroundColor: "#f0f", 
+                        }}
+                    />
+                </span>
             </Rnd>
         );
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        wireframes: state.firestore.ordered.wireframeItems,
-        auth: state.firebase.auth,
-    };
-};
-
-export default compose(connect(mapStateToProps))(DraggableButton);
-
+export default DraggableButton;
