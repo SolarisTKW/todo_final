@@ -1,28 +1,19 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { Rnd } from 'react-rnd';
 
 class DraggableLabel extends React.Component {
-
-    state={
+    state = {
         selected: false,
-        width: 100,
-        height: 50,
-        x: 0,
-        y: 0,
-        name: "Label",
-        fontSize: 10,
-        backgroundColor: "#FFFFFF",
-        borderColor: "#ab3214",
-        fontColor: "#000000",
-        borderRadius: 3,
-        borderThickness: 5,
+        data: this.props.item,
     }
     
     handleClick = () =>
-    {  
+    {
+
+        this.props.handleChangeType(this.state.data);
+        
+        this.props.handleInsideClick();
+
         if(this.state.selected === false)
         {
             this.setState(
@@ -33,61 +24,32 @@ class DraggableLabel extends React.Component {
         }
     }
 
-    handleClickOff = () =>
-    {  
-        if(this.state.selected === true)
-        {
-            this.setState(
-                {
-                    selected: false
-                }
-            );
-        }
-    }
-
-    handleDragStart = () => 
+    handleDrag = (e,d) =>
     {
-
-    }
-
-    handleDragStop = (e,d) =>
-    {
-        this.setState({ x: d.x, y: d.y });
+        this.props.handleReposition(e,d);
     }
 
     handleResize = (e, direction, ref, delta, position) =>
     {
         if(this.state.selected)
         {
-            this.setState({
-                width: ref.style.width,
-                height: ref.style.height,
-                ...position,
-                });
+            this.props.handleResize(e, direction, ref, delta, position);
         }
     }
 
     render() {
         return (
             <Rnd default={{
-                x: 0,
-                y: 0,
-                width: 100,
-                height: 50,
+                x: this.props.item.x,
+                y: this.props.item.y,
+                width: this.props.item.width,
+                height: this.props.item.height,
               }}
-              
-              style = {this.state.selected ? 
-                    {
-                        // backgroundColor: "#f0f",
-                    }:
 
-                    {
-                        // backgroundColor: "#000000",
-                    }
-                }
+              bounds="parent" 
 
-              bounds="parent"
               onResize={this.handleResize}
+              onDrag={this.handleDrag}
               onClick={this.handleClick}
               disableDragging={!this.state.selected}
 
@@ -116,84 +78,78 @@ class DraggableLabel extends React.Component {
                 }
             >
                 <label
-                    style={{
-                        width: this.state.width,
-                        height: this.state.height,
-                        fontSize: this.state.fontSize,
-                        backgroundColor: this.state.backgroundColor,
-                        borderColor: this.state.borderColor,
-                        color: this.state.fontColor,
-                        borderWidth: this.state.borderThickness,
-                        borderRadius: this.state.borderRadius,
-                        borderStyle: "solid",
-                        userSelect: "none",
-                    }}
+                    style={
+                        {
+                            width: this.props.item.width,
+                            height: this.props.item.height,
+                            fontSize: this.props.item.fontSize+"px",
+                            backgroundColor: this.props.item.backgroundColor,
+                            borderColor: this.props.item.borderColor,
+                            color: this.props.item.fontColor,
+                            borderWidth: this.props.item.borderThickness+"px",
+                            borderRadius: this.props.item.borderRadius+"px",
+                            border: "solid"
+                        }
+                    }
                 >
-                    {this.state.name}
-                    
-                    {/*Squares for resizing*/}
-                    <span 
-                    style={{visibility: this.state.selected ? "visible":"hidden"}}>
-                        <div 
-                            className="bottom_left_square" 
-                            style={{
-                                position: "absolute",
-                                userSelect: "none",
-                                width: 20, 
-                                height: 20, 
-                                left: -10, 
-                                bottom: -10,
-                                backgroundColor: "#f0f", 
-                            }}
-                        />
-                        <div 
-                            className="bottom_right_square" 
-                            style={{
-                                position: "absolute",
-                                userSelect: "none",
-                                width: 20, 
-                                height: 20, 
-                                right: -10, 
-                                bottom: -10,
-                                backgroundColor: "#f0f", 
-                            }}
-                        />
-                        <div 
-                            className="top_left_square" 
-                            style={{
-                                position: "absolute",
-                                userSelect: "none",
-                                width: 20, 
-                                height: 20, 
-                                left: -10, 
-                                top: -10,
-                                backgroundColor: "#f0f", 
-                            }}
-                        />
-                        <div 
-                            className="top_right_square" 
-                            style={{
-                                position: "absolute",
-                                userSelect: "none",
-                                width: 20, 
-                                height: 20, 
-                                right: -10, 
-                                top: -10,
-                                backgroundColor: "#f0f", 
-                            }}
-                        />
-                    </span>
+                    {this.props.item.text}
                 </label>
+                
+                {/*Squares for resizing*/}
+                <span 
+                style={{visibility: this.state.selected ? "visible":"hidden"}}>
+                    <div 
+                        className="bottom_left_square" 
+                        style={{
+                            position: "absolute",
+                            userSelect: "none",
+                            width: 20, 
+                            height: 20, 
+                            left: -10, 
+                            bottom: -10,
+                            backgroundColor: "#f0f", 
+                        }}
+                    />
+                    <div 
+                        className="bottom_right_square" 
+                        style={{
+                            position: "absolute",
+                            userSelect: "none",
+                            width: 20, 
+                            height: 20, 
+                            right: -10, 
+                            bottom: -10,
+                            backgroundColor: "#f0f", 
+                        }}
+                    />
+                    <div 
+                        className="top_left_square" 
+                        style={{
+                            position: "absolute",
+                            userSelect: "none",
+                            width: 20, 
+                            height: 20, 
+                            left: -10, 
+                            top: -10,
+                            backgroundColor: "#f0f", 
+                        }}
+                    />
+                    <div 
+                        className="top_right_square" 
+                        style={{
+                            position: "absolute",
+                            userSelect: "none",
+                            width: 20, 
+                            height: 20, 
+                            right: -10, 
+                            top: -10,
+                            backgroundColor: "#f0f", 
+                        }}
+                    />
+                </span>
             </Rnd>
         );
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        wireframes: state.firestore.ordered.wireframeItems,
-        auth: state.firebase.auth,
-    };
-};
-
-export default compose(connect(mapStateToProps))(DraggableLabel);
+export default DraggableLabel;

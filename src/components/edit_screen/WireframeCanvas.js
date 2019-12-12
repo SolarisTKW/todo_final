@@ -12,67 +12,96 @@ import DraggableTextfield from './DraggableTextfield.js';
 class WireframeCanvas extends Component {
 
     state = {
-        tempItem:{
-            key: 0,
-            type: "Button",
-            text: "Submit",
-            width: 75,
-            height: 40,
-            x: 0,
-            y: 0,
-            fontSize: 10,
-            backgroundColor: "#FFFFFF",
-            borderColor: "#000000",
-            fontColor: "#000000",
-            borderRadius: 5,
-            borderThickness: 3
-        }
+        selectionClick: false,
     }
 
-    handleClick = (e) => {
-        if (this.state.selected === "") {
+    handleSelectionClick = () => {
+        if (!this.state.selectionClick) {
           // attach/remove event handler
           document.addEventListener('click', this.handleOutsideClick, false);
-        } 
-        else {
+        } else {
           document.removeEventListener('click', this.handleOutsideClick, false);
         }
-        
-        if(e.target === this.node){
-            this.setState({
-                selected: "", 
-                type: "",
-            });
-        }
-        else{
-            this.setState({
-                selected: e.target.getId(), 
-                type: e.target.getType(),
-            });
-        }
-      }
+    
+        this.setState(prevState => ({
+           selectionClick: !prevState.selectionClick,
+        }));
+
+        console.log(this.state.selectionClick ? "outside" : "inside");
+    }
       
-      handleOutsideClick = (e) => {
-        // ignore clicks on the component itself
+    handleOutsideClick = (e) => {
+    // ignore clicks on the component itself
         if (this.node.contains(e.target)) {
+            console.log(this.state.selectionClick ? "outside" : "inside");
+
           return;
         }
         
-        this.handleClick();
-      }
+        this.handleSelectionClick();
+    }
 
     render() {
+        var wireframe = this.props.wireframe;
+        var items = wireframe.elements;
         return(
-            <Container className="edit_panel"
-            ref={node => {this.node = node;}}
-                >
+            <div className="edit_panel container"
+            ref={node => { this.node = node; }}
+            >
                 2/3
-                <DraggableContainer/>
-                <DraggableButton item={this.state.tempItem} key={this.state.tempItem.key}/>
-                <DraggableLabel/>
-                <DraggableTextfield/>
+
+                {items && items.map(item => {
+                        item.id = item.key;
+                        switch(item.type){
+                        case "Container":
+                            return(
+                                <DraggableContainer
+                                    item={item}
+                                    handleChangeType={this.props.handleChangeType}
+                                    handleInsideClick={this.handleSelectionClick}
+                                    handleResize={this.props.handleResize}
+                                    handleReposition={this.props.handleReposition}
+                                    selected={true}
+                                />
+                                );
+                        case "Button":
+                            return(
+                                <DraggableButton 
+                                    item={item}
+                                    handleChangeType={this.props.handleChangeType}
+                                    handleInsideClick={this.handleSelectionClick}
+                                    handleResize={this.props.handleResize}
+                                    handleReposition={this.props.handleReposition}
+                                    selected={true}
+                                />
+                                );
+                        case "Label":
+                            return(
+                                <DraggableLabel 
+                                    item={item}
+                                    handleChangeType={this.props.handleChangeType}
+                                    handleInsideClick={this.handleSelectionClick}
+                                    handleResize={this.props.handleResize}
+                                    handleReposition={this.props.handleReposition}
+                                    selected={true}
+                                />
+                                );
+                        case "Textfield":
+                            return(
+                                <DraggableTextfield 
+                                    item={item}
+                                    handleChangeType={this.props.handleChangeType}
+                                    handleInsideClick={this.handleSelectionClick}
+                                    handleResize={this.props.handleResize}
+                                    handleReposition={this.props.handleReposition}
+                                    selected={true}
+                                />
+                                );
+                        }
+                    })
+                }
                             
-            </Container>
+            </div>
         );
     }
 }
@@ -83,9 +112,4 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-export default compose(
-    connect(mapStateToProps),
-    firestoreConnect([
-      { collection: 'wireframeItems' },
-    ]),
-)(WireframeCanvas);
+export default WireframeCanvas;

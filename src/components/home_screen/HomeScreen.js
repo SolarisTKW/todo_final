@@ -15,7 +15,7 @@ state = {
 
     registerRecent = (id) =>
     {
-        var x = new Date;
+        var x = new Date();
         var firestore = getFirestore();
         firestore.collection('wireframeItems').doc(id).update(
             {

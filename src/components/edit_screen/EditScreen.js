@@ -4,23 +4,39 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
+
 import { FormInput, Button, Container, Col, Row , Card, Modal, ModalHeader, ModalBody} from "shards-react";
 import { SketchPicker } from 'react-color';
 import WireframeCanvas from './WireframeCanvas.js';
 
 class EditScreen extends Component {
     state = {
+        //General
+        wireframe: this.props.wireframe, //initialize
+        selected: -1,
+
+        //Left
         saved: false,
         showModal: false,
-        type: "button",
+
+        //Center
+        selectionClick: false,
+
+        //Right
+        type: "",
         showColorPickerBackground: false,
         showColorPickerBorder: false,
-        backgroundColor: "#000000",
-        borderColor: "#f0f",
-        fontColor: "#000000",
-        criteria: "",
+
+        text: "",
+        fontSize: 0,
+        borderRadius: 0,
+        borderThickness: 0,
+        backgroundColor: "",
+        borderColor: "",
+        fontColor: "",
     }
 
+    //LEFT SIDE
     handleZoomIn = () => {
 
     }
@@ -66,6 +82,16 @@ class EditScreen extends Component {
             }
         );
     }
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Center
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Right Side
 
     setShowBackground = () => {
         this.setState(
@@ -91,39 +117,157 @@ class EditScreen extends Component {
         )
     }
 
-    handleChangeCompleteBackground = (color) => {
+    handleChangeType = (item) =>
+    {
+        this.setState(state=>(
+            {
+                ...state,
+                type: item.type,
+                selected: item.key,
+
+                text: item.text,
+                fontSize: item.fontSize,
+                borderRadius: item.borderRadius,
+                borderThickness: item.borderThickness,
+                backgroundColor: item.backgroundColor,
+                borderColor: item.borderColor,
+                fontColor: item.fontColor,
+            })
+        );
+
+        console.log(this.state.selected);
+    }
+
+    handleResize = (e, direction, ref, delta, position) =>
+    {
+        var newWireframe = this.state.wireframe;
+        newWireframe.elements[this.state.selected] = 
+        {
+            ...newWireframe.elements[this.state.selected],
+            "width": ref.style.width,
+            "height": ref.style.height,
+            ...position
+        };
+
         this.setState(
             {
-                backgroundColor: color.hex
+                ...this.state,
+                wireframe: newWireframe,
             }
         );
+    }
+
+    handleReposition = (e, d) =>
+    {
+        var newWireframe = this.state.wireframe;
+        newWireframe.elements[this.state.selected] = 
+        {
+            ...newWireframe.elements[this.state.selected],
+            "x": d.x,
+            "y": d.y,
+        };
+
+        this.setState(
+            {
+                ...this.state,
+                wireframe: newWireframe,
+            }
+        );
+        console.log(this.state.wireframe.elements[this.state.selected]);
+    }
+    
+    handleChange = (e) => {
+        const {target} = e;
+        var newWireframe = this.state.wireframe;
+        newWireframe.elements[this.state.selected] = 
+        {
+            ...newWireframe.elements[this.state.selected],
+            [target.id]: target.value
+        };
+
+        this.setState(
+            {
+                ...this.state,
+                [target.id]: target.value,
+
+                wireframe: newWireframe
+            }
+        );
+        
+        console.log(this.state.wireframe.elements);
+    }
+
+    //REDO ALL OF THESE CHANGE
+
+    handleChangeCompleteBackground = (color) => {
+
+        var newWireframe = this.state.wireframe;
+        newWireframe.elements[this.state.selected] = 
+        {
+            ...newWireframe.elements[this.state.selected],
+            "backgroundColor": color.hex
+        };
+
+        this.setState(
+            {
+                ...this.state,
+                backgroundColor: color.hex,
+
+                wireframe: newWireframe
+            }
+        );
+        
+        console.log(this.state.wireframe.elements);
     }
 
     handleChangeCompleteBorder = (color) => {
+        var newWireframe = this.state.wireframe;
+        newWireframe.elements[this.state.selected] = 
+        {
+            ...newWireframe.elements[this.state.selected],
+            "borderColor": color.hex
+        };
+
         this.setState(
             {
-                borderColor: color.hex
+                ...this.state,
+                borderColor: color.hex,
+
+                wireframe: newWireframe
             }
         );
+        
+        console.log(this.state.wireframe.elements);
     }
 
     handleChangeCompleteFont = (color) => {
+        var newWireframe = this.state.wireframe;
+        newWireframe.elements[this.state.selected] = 
+        {
+            ...newWireframe.elements[this.state.selected],
+            "fontColor": color.hex
+        };
+
         this.setState(
             {
-                fontColor: color.hex
+                ...this.state,
+                fontColor: color.hex,
+
+                wireframe: newWireframe
             }
         );
+        
+        console.log(this.state.wireframe.elements);
     }
 
     render() {
         const auth = this.props.auth;
-        const wireframe = this.props.wireframe;
         if (!auth.uid) {
             return <Redirect to="/" />;
         }
 
-        // if(!wireframe)
-	    //     return <React.Fragment />;
+        if(!this.props.wireframe)
+	        return <React.Fragment />;
 
         return (
             <Container className="edit_container">
@@ -132,11 +276,12 @@ class EditScreen extends Component {
                         Are you sure you want to quit without saving?
                     </ModalHeader>
                     <ModalBody>
-                        <Button className="save_and_close" onClick={this.handleSaveAndClose}> 
-                            <Link to="/">
+                        <Link to="/">
+                            <Button className="save_and_close" onClick={this.handleSaveAndClose}>
                                 Save and Close
-                            </Link>
-                        </Button>
+                            </Button>
+                        </Link>
+    
                         <Button className="cancel" theme="danger" onClick={this.handleCancel}>
                             Cancel
                         </Button>
@@ -144,26 +289,27 @@ class EditScreen extends Component {
                 </Modal>
 
                 <Row>
-                    <Col center sm = "2" md="2" lg="2" className="edit_col">
+
+                    <Col sm = "2" md="2" lg="2" className="edit_col">
                         <Card className="edit_panel">
                             <Container className="zoom_bar">
                                 <Row>
-                                    <Col center sm = "2" md="2" lg="2">
+                                    <Col sm = "2" md="2" lg="2">
                                         <div className="zoom_bar">
                                             <i className="material-icons">zoom_in</i>
                                         </div>
                                     </Col>
-                                    <Col center sm = "2" md="2" lg="2">
+                                    <Col sm = "2" md="2" lg="2">
                                         <div className="zoom_bar">
                                             <i className="material-icons">zoom_out</i>
                                         </div>
                                     </Col>
-                                    <Col center sm = "4" md="4" lg="4">
+                                    <Col sm = "4" md="4" lg="4">
                                         <div className="zoom_bar_text" onClick={this.handleSave}>
                                             Save
                                         </div>
                                     </Col>
-                                    <Col center sm = "4" md="4" lg="4">
+                                    <Col sm = "4" md="4" lg="4">
                                         <div className="zoom_bar_text">
                                             <Link to="/" onClick={this.handleClose}>
                                                 Close
@@ -216,25 +362,36 @@ class EditScreen extends Component {
                         </Card>
                     </Col>
 
-                    <Col center sm = "8" md="8" lg="8" className="edit_col">
-                        <WireframeCanvas/>
+                    {/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+
+                    <Col sm = "8" md="8" lg="8" className="edit_col">
+                        <WireframeCanvas 
+                        wireframe={this.state.wireframe} 
+                        handleChangeType={this.handleChangeType}
+                        handleResize={this.handleResize}
+                        handleReposition={this.handleReposition}
+                        />
                     </Col>
 
-                    <Col center sm = "2" md="2" lg="2" className="edit_col">
+                    {/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
+
+                    <Col sm = "2" md="2" lg="2" className="edit_col">
                         {(()=> {
                             switch(this.state.type){
-                                case 'container':
+                                case 'Container':
                                     return(
                                         <Card className="edit_panel">
+
+                                            <hr className="new2"/>
 
                                             <div className="input_container">
                                                 <div className="color_picker_container">
                                                     <label htmlFor="color_picker_circle" className="grey-text color_picker_circle_label">Background: </label>
-                                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.backgroundColor, color: "#FFFFFF"}} onClick={this.setShowBackground}>{this.state.backgroundColor}</div>
+                                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.wireframe.elements[this.state.selected].backgroundColor, color: "#FFFFFF"}} onClick={this.setShowBackground}>{this.state.wireframe.elements[this.state.selected].backgroundColor}</div>
                                                     <div>{
                                                         this.state.showColorPickerBackground ?
                                                         <SketchPicker
-                                                        color={this.state.backgroundColor}
+                                                        color={this.state.wireframe.elements[this.state.selected].backgroundColor}
                                                         onChangeComplete={this.handleChangeCompleteBackground}
                                                         className="color_picker"/> : null
                                                     }
@@ -247,11 +404,11 @@ class EditScreen extends Component {
                                             <div className="input_container">
                                                 <div className="color_picker_container">
                                                     <label htmlFor="color_picker_circle" className="grey-text color_picker_circle_label">Border Color: </label>
-                                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.borderColor, color: "#FFFFFF"}} onClick={this.setShowBorder}>{this.state.borderColor}</div>
+                                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.wireframe.elements[this.state.selected].borderColor, color: "#FFFFFF"}} onClick={this.setShowBorder}>{this.state.wireframe.elements[this.state.selected].borderColor}</div>
                                                     <div>{
                                                         this.state.showColorPickerBorder ?
                                                         <SketchPicker
-                                                        color={this.state.borderColor}
+                                                        color={this.state.wireframe.elements[this.state.selected].borderColor}
                                                         onChangeComplete={this.handleChangeCompleteBorder}
                                                         className="color_picker"/> : null
                                                     }
@@ -262,21 +419,21 @@ class EditScreen extends Component {
                                             <hr className="new2"/>
 
                                             <div className="input_container">
-                                                <label htmlFor="border_thickness">Border Thickness:</label>
-                                                <FormInput name="border_thickness" id="border_thickness" placeholder="10"></FormInput>
+                                                <label htmlFor="borderThickness">Border Thickness:</label>
+                                                <FormInput name="borderThickness" id="borderThickness" value={this.state.wireframe.elements[this.state.selected].borderThickness} onChange={this.handleChange}></FormInput>
                                             </div>
 
                                             <hr className="new2"/>
 
                                             <div className="input_container">
-                                                <label htmlFor="border_radius">Border Radius:</label>
-                                                <FormInput name="border_radius" id="border_radius" placeholder="10"></FormInput>
+                                                <label htmlFor="borderRadius">Border Radius:</label>
+                                                <FormInput name="borderRadius" id="borderRadius" value={this.state.wireframe.elements[this.state.selected].borderRadius} onChange={this.handleChange}></FormInput>
                                             </div>
                                             
                                             Container
                                         </Card>
                                     );
-                                case null:
+                                case "":
                                     return(
                                         <Card className="edit_panel">
                                             <h5>Select an existing control!</h5>
@@ -287,14 +444,14 @@ class EditScreen extends Component {
                                         <Card className="edit_panel">
                                             <div className="input_container">
                                                 <label>Properties</label>
-                                                <FormInput name="name" id="id" placeholder="Name"></FormInput>
+                                                <FormInput name="text" id="text" value={this.state.wireframe.elements[this.state.selected].text} onChange={this.handleChange}></FormInput>
                                             </div>
 
                                             <hr className="new2"/>
 
                                             <div className="input_container">
-                                                <label htmlFor="font_size">Font Size:</label>
-                                                <FormInput name="font_size" id="font_size" placeholder="10"></FormInput>
+                                                <label htmlFor="fontSize">Font Size:</label>
+                                                <FormInput name="fontSize" id="fontSize" value={this.state.wireframe.elements[this.state.selected].fontSize} onChange={this.handleChange}></FormInput>
                                             </div>
                                             
                                             <hr className="new2"/>
@@ -302,11 +459,11 @@ class EditScreen extends Component {
                                             <div className="input_container">
                                                 <div className="color_picker_container">
                                                     <label htmlFor="color_picker_circle" className="grey-text color_picker_circle_label">Font Color: </label>
-                                                    <div className={"btn-floating color_picker_circle"} style={{color: this.state.fontColor, backgroundColor: "#FFFFFF"}} onClick={this.setShowFontColor}>{this.state.fontColor}</div>
+                                                    <div className={"btn-floating color_picker_circle"} style={{color: this.state.wireframe.elements[this.state.selected].fontColor, backgroundColor: "#FFFFFF"}} onClick={this.setShowFontColor}>{this.state.wireframe.elements[this.state.selected].fontColor}</div>
                                                     <div>{
                                                         this.state.showColorPickerFont ?
                                                         <SketchPicker
-                                                        color={this.state.fontColor}
+                                                        color={this.state.wireframe.elements[this.state.selected].fontColor}
                                                         onChangeComplete={this.handleChangeCompleteFont}
                                                         className="color_picker"/> : null
                                                     }
@@ -319,11 +476,11 @@ class EditScreen extends Component {
                                             <div className="input_container">
                                                 <div className="color_picker_container">
                                                     <label htmlFor="color_picker_circle" className="grey-text color_picker_circle_label">Background: </label>
-                                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.backgroundColor, color: "#FFFFFF"}} onClick={this.setShowBackground}>{this.state.backgroundColor}</div>
+                                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.wireframe.elements[this.state.selected].backgroundColor, color: "#FFFFFF"}} onClick={this.setShowBackground}>{this.state.wireframe.elements[this.state.selected].backgroundColor}</div>
                                                     <div>{
                                                         this.state.showColorPickerBackground ?
                                                         <SketchPicker
-                                                        color={this.state.backgroundColor}
+                                                        color={this.state.wireframe.elements[this.state.selected].backgroundColor}
                                                         onChangeComplete={this.handleChangeCompleteBackground}
                                                         className="color_picker"/> : null
                                                     }
@@ -336,11 +493,11 @@ class EditScreen extends Component {
                                             <div className="input_container">
                                                 <div className="color_picker_container">
                                                     <label htmlFor="color_picker_circle" className="grey-text color_picker_circle_label">Border Color: </label>
-                                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.borderColor, color: "#FFFFFF"}} onClick={this.setShowBorder}>{this.state.borderColor}</div>
+                                                    <div className={"btn-floating color_picker_circle"} style={{backgroundColor: this.state.wireframe.elements[this.state.selected].borderColor, color: "#FFFFFF"}} onClick={this.setShowBorder}>{this.state.wireframe.elements[this.state.selected].borderColor}</div>
                                                     <div>{
                                                         this.state.showColorPickerBorder ?
                                                         <SketchPicker
-                                                        color={this.state.borderColor}
+                                                        color={this.state.wireframe.elements[this.state.selected].borderColor}
                                                         onChangeComplete={this.handleChangeCompleteBorder}
                                                         className="color_picker"/> : null
                                                     }
@@ -351,15 +508,15 @@ class EditScreen extends Component {
                                             <hr className="new2"/>
 
                                             <div className="input_container">
-                                                <label htmlFor="border_thickness">Border Thickness:</label>
-                                                <FormInput name="border_thickness" id="border_thickness" placeholder="10"></FormInput>
+                                                <label htmlFor="borderThickness">Border Thickness:</label>
+                                                <FormInput name="borderThickness" id="borderThickness" value={this.state.wireframe.elements[this.state.selected].borderThickness} onChange={this.handleChange}></FormInput>
                                             </div>
 
                                             <hr className="new2"/>
 
                                             <div className="input_container">
-                                                <label htmlFor="border_radius">Border Radius:</label>
-                                                <FormInput name="border_radius" id="border_radius" placeholder="10"></FormInput>
+                                                <label htmlFor="borderRadius">Border Radius:</label>
+                                                <FormInput name="borderRadius" id="borderRadius" value={this.state.wireframe.elements[this.state.selected].borderRadius} onChange={this.handleChange}></FormInput>
                                             </div>
                                             
                                             Textual
@@ -370,7 +527,9 @@ class EditScreen extends Component {
                             }
                             )()}
                     </Col>
+
                 </Row>
+
             </Container>
         );
     }
@@ -378,10 +537,11 @@ class EditScreen extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { id } = ownProps.match.params;
-  const { wireframes } = state.firestore.data;
-  const wireframe = wireframes ? wireframes[id] : null;
+  const { wireframeItems } = state.firestore.data;
+  console.log(wireframeItems);
+  const wireframe = wireframeItems ? wireframeItems[id] : null;
   if(wireframe)
-	wireframe.id = id;
+    wireframe.id = id;
 
   return {
     wireframe,

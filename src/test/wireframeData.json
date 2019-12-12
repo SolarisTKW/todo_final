@@ -22,8 +22,8 @@
                 },
                 {
                     "key": 1,
-                    "type": "Button",
-                    "text": "Submit",
+                    "type": "Label",
+                    "text": "Label",
                     "width": 75,
                     "height": 40,
                     "x": 0,
@@ -37,8 +37,8 @@
                 },
                 {
                     "key": 2,
-                    "type": "Button",
-                    "text": "Submit",
+                    "type": "Textfield",
+                    "text": "Textfield",
                     "width": 75,
                     "height": 40,
                     "x": 0,
@@ -52,17 +52,14 @@
                 },
                 {
                     "key": 3,
-                    "type": "Button",
-                    "text": "Submit",
-                    "width": 75,
-                    "height": 40,
+                    "type": "Container",
+                    "width": 200,
+                    "height": 100,
                     "x": 0,
                     "y": 0,
-                    "fontSize": 10,
                     "backgroundColor": "#FFFFFF",
-                    "borderColor": "#000000",
-                    "fontColor": "#000000",
-                    "borderRadius": 5,
+                    "borderColor": "#f0f",
+                    "borderRadius": 10,
                     "borderThickness": 3
                 }
             ]

@@ -1,37 +1,19 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { Rnd } from 'react-rnd';
 
 class DraggableButton extends React.Component {
-    constructor()
-    {
-        super();
-        
-        this.state = {
-            selected: false,
-            data:
-            {
-                key: 0,
-                type: "Button",
-                text: "Submit",
-                width: 75,
-                height: 40,
-                x: 0,
-                y: 0,
-                fontSize: 10,
-                backgroundColor: "#FFFFFF",
-                borderColor: "#000000",
-                fontColor: "#000000",
-                borderRadius: 5,
-                borderThickness: 3
-            }
-        }
+    state = {
+        selected: this.props.selected,
+        data: this.props.item,
     }
     
     handleClick = () =>
-    {  
+    {
+
+        this.props.handleChangeType(this.state.data);
+        
+        this.props.handleInsideClick();
+
         if(this.state.selected === false)
         {
             this.setState(
@@ -42,87 +24,32 @@ class DraggableButton extends React.Component {
         }
     }
 
-    handleClickOff = () =>
-    {  
-        if(this.state.selected === true)
-        {
-            this.setState(
-                {
-                    selected: false
-                }
-            );
-        }
-    }
-
-    handleDragStart = () => 
+    handleDrag = (e,d) =>
     {
-
-    }
-
-    handleDragStop = (e,d) =>
-    {
-        this.setState({ 
-            data:{
-                    type: this.state.data.type,
-                    text: this.state.data.text,
-                    width: this.state.data.width,
-                    height: this.state.data.height,
-                    x: d.x,
-                    y: d.y,
-                    fontSize: this.state.data.fontSize,
-                    backgroundColor: this.state.data.backgroundColor,
-                    borderColor: this.state.data.borderColor,
-                    fontColor: this.state.data.fontColor,
-                    borderRadius: this.state.data.borderRadius,
-                    borderThickness: this.state.data.borderThickness
-                }
-        });
+        this.props.handleReposition(e,d);
     }
 
     handleResize = (e, direction, ref, delta, position) =>
     {
         if(this.state.selected)
         {
-            this.setState({
-                data:{
-                        type: this.state.data.type,
-                        text: this.state.data.text,
-                        width: ref.style.width,
-                        height: ref.style.height,
-                        ...position,
-                        fontSize: this.state.data.fontSize,
-                        backgroundColor: this.state.data.backgroundColor,
-                        borderColor: this.state.data.borderColor,
-                        fontColor: this.state.data.fontColor,
-                        borderRadius: this.state.data.borderRadius,
-                        borderThickness: this.state.data.borderThickness
-                    }
-            });
+            this.props.handleResize(e, direction, ref, delta, position);
         }
     }
 
     render() {
         return (
             <Rnd default={{
-                x: 0,
-                y: 0,
-                width: 75,
-                height: 40,
+                x: this.props.item.x,
+                y: this.props.item.y,
+                width: this.props.item.width,
+                height: this.props.item.height,
               }}
-              
-              style = {this.state.selected ? 
-                    {
-                        backgroundColor: "#f0f",
-                    }:
-
-                    {
-                        backgroundColor: "#000000",
-                    }
-                }
 
               bounds="parent" 
 
               onResize={this.handleResize}
+              onDrag={this.handleDrag}
               onClick={this.handleClick}
               disableDragging={!this.state.selected}
 
@@ -151,19 +78,21 @@ class DraggableButton extends React.Component {
                 }
             >
                 <button
-                    style={{
-                        width: this.state.data.width,
-                        height: this.state.data.height,
-                        fontSize: this.state.data.fontSize,
-                        backgroundColor: this.state.data.backgroundColor,
-                        borderColor: this.state.data.borderColor,
-                        color: this.state.data.fontColor,
-                        borderWidth: this.state.data.borderThickness,
-                        borderRadius: this.state.data.borderRadius,
-                        border: "solid"
-                    }}
+                    style={
+                        {
+                            width: this.props.item.width,
+                            height: this.props.item.height,
+                            fontSize: this.props.item.fontSize+"px",
+                            backgroundColor: this.props.item.backgroundColor,
+                            borderColor: this.props.item.borderColor,
+                            color: this.props.item.fontColor,
+                            borderWidth: this.props.item.borderThickness+"px",
+                            borderRadius: this.props.item.borderRadius+"px",
+                            border: "solid"
+                        }
+                    }
                 >
-                    {this.state.data.text}
+                    {this.props.item.text}
                 </button>
                 
                 {/*Squares for resizing*/}
