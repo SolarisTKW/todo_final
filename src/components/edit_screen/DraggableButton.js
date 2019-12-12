@@ -13,6 +13,7 @@ class DraggableButton extends React.Component {
             selected: false,
             data:
             {
+                key: 0,
                 type: "Button",
                 text: "Submit",
                 width: 75,
