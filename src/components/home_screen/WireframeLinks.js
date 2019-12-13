@@ -18,7 +18,11 @@ class WireframeLinks extends React.Component {
                         pathname: '/wireframe/' + wireframe.id,
                         state: {show: false}
                         }}>
-                        <WireframeCard wireframe={wireframe} handleRegister = {this.props.handleRegister}/>
+                        <WireframeCard 
+                            wireframe={wireframe} 
+                            handleRegister = {this.props.handleRegister}
+                            handleDeleteWireframe = {this.props.handleDeleteWireframe}
+                        />
                     </Link>
                 ))}
             </div>

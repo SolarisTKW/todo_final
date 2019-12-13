@@ -55,6 +55,13 @@ state = {
         );
     }
 
+    handleDeleteWireframe = (id) =>
+    {
+        var firestore = getFirestore();
+        const collection = firestore.collection('wireframeItems');
+        collection.doc(id).delete();
+    }
+
     render() {
         if (!this.props.auth.uid) {
             return <Redirect to="/login" />;
@@ -64,7 +71,7 @@ state = {
             <div className="dashboard container">
                 <div className="row">
                     <div className="col s12 m4">
-                        <WireframeLinks handleRegister={this.registerRecent}/>
+                        <WireframeLinks handleRegister={this.registerRecent} handleDeleteWireframe = {this.handleDeleteWireframe}/>
                     </div>
 
                     <Modal open={this.state.show} toggle={this.toggleModal}>

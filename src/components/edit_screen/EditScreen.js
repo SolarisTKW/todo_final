@@ -16,6 +16,8 @@ class EditScreen extends Component {
         //General
         wireframe: this.props.wireframe, //initialize
         selected: -1,
+        width: 780,
+        height: 850,
 
         //Left
         saved: false,
@@ -61,8 +63,15 @@ class EditScreen extends Component {
         }
     }
 
-    handleSave = () => {
-
+    handleSave = (ownProps) => {
+        const fireStore = getFirestore();
+        var x = new Date();
+        fireStore.collection('wireframeItems').doc(this.props.wireframe.id).update(
+            {
+                ...this.state.wireframe,
+                time: x.getTime()
+            }
+        );
     }
 
     handleSaveAndClose = () =>
@@ -196,11 +205,44 @@ class EditScreen extends Component {
     }
 
     handleDuplicateControl = (key, e) => {
-
+        if(this.state.selected !== -1)
+        {
+            console.log("DUPLICATE");
+            const length = this.state.wireframe.elements.length;
+            var newWireframe = this.state.wireframe;
+            var item = newWireframe.elements[this.state.selected];
+            var newItem = {
+                ...item,
+                key: length
+            }
+            newWireframe.elements.push(newItem);
+            this.setState(state=>(
+                {
+                    ...state,
+                    wireframe: newWireframe
+                })
+            );
+        }
     }
 
     handleDeleteControl = (key, e) => {
-        
+        if(this.state.selected !== -1)
+        {
+            console.log("DELETE");
+            var newWireframe = this.state.wireframe;
+            newWireframe.elements.splice(this.state.selected, 1);
+
+            this.setState(
+                {
+                    ...this.state,
+                    selected: -1,
+                    type: "",
+                    wireframe: newWireframe
+                }
+            );
+            
+            console.log(this.state.wireframe.elements);
+        }
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -448,7 +490,15 @@ class EditScreen extends Component {
                                         </div>
                                     </Col>
                                     <Col sm = "4" md="4" lg="4">
-                                        <div className="zoom_bar_text" onClick={this.handleSave}>
+                                        <div className="zoom_bar_text" 
+                                        onClick={this.handleSave}
+                                        style={
+                                            {
+                                                color: "#007bff",
+                                                cursor: "pointer",
+                                            }
+                                        }
+                                        >
                                             Save
                                         </div>
                                     </Col>
@@ -506,6 +556,19 @@ class EditScreen extends Component {
                                     Textfield
                                 </label>
                             </div>
+
+                            
+                            <div className="width_textfield_wrapper">
+                                <label className="label_for_sample" htmlFor="width_textfield">
+                                    width
+                                </label>
+                                <input 
+                                    type="text" 
+                                    className="width_textfield" 
+                                    value={this.state.width} 
+                                />
+                            </div>
+                            
 
                             1/3
                         </Card>
