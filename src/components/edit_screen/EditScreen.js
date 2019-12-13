@@ -25,6 +25,7 @@ class EditScreen extends Component {
 
         //Center
         selectionClick: false,
+        zoomScale: 1.0,
 
         //Right
         type: "",
@@ -43,11 +44,15 @@ class EditScreen extends Component {
 
     //LEFT SIDE
     handleZoomIn = () => {
-
+        this.setState({
+            zoomScale: (this.state.zoomScale * 2)
+        });
     }
 
     handleZoomOut = () => {
-
+        this.setState({
+            zoomScale: (this.state.zoomScale/2)
+        });
     }
 
     handleClose = (e) => {
@@ -513,12 +518,16 @@ class EditScreen extends Component {
                                 <Row>
                                     <Col sm = "2" md="2" lg="2">
                                         <div className="zoom_bar">
-                                            <i className="material-icons">zoom_in</i>
+                                            <i className="material-icons"
+                                            onClick={this.handleZoomIn}
+                                            >zoom_in</i>
                                         </div>
                                     </Col>
                                     <Col sm = "2" md="2" lg="2">
                                         <div className="zoom_bar">
-                                            <i className="material-icons">zoom_out</i>
+                                            <i className="material-icons"
+                                            onClick={this.handleZoomOut}
+                                            >zoom_out</i>
                                         </div>
                                     </Col>
                                     <Col sm = "4" md="4" lg="4">
@@ -613,12 +622,6 @@ class EditScreen extends Component {
                                 />
                             </div>
 
-                            <div className="submit_dimensions_wrapper">
-                                <Button type="submit"> 
-                                    Submit Changes
-                                </Button>
-                            </div>
-
                         </Card>
                     </Col>
 
@@ -632,6 +635,7 @@ class EditScreen extends Component {
                         handleReposition={this.handleReposition}
                         handleUnselect={this.handleUnselect}
                         selected={this.state.selected}
+                        zoomScale={this.state.zoomScale}
                         />
                     </Col>
 

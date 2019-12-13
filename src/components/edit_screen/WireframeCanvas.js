@@ -131,6 +131,7 @@ class WireframeCanvas extends Component {
                         node => { this.node = node; }
                     }
                     style = {{
+                        zoom: this.props.zoomScale,
                         width: this.props.wireframe.width,
                         height: this.props.wireframe.height,
                     }}
