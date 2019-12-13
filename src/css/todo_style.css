@@ -114,10 +114,15 @@ hr.new2 {
 
 .save_and_close
 {
-  margin-right: 100px
+  
 }
 
 .cancel
 {
   position:relative;
+}
+
+.close_without_saving
+{
+  font-size: 8px !important;
 }

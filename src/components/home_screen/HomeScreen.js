@@ -49,6 +49,8 @@ state = {
             {
                 key: this.props.wireframes.length,
                 name: this.state.name,
+                width: "780px",
+                height: "850px",
                 elements: [],
                 time: x.getTime()
             }

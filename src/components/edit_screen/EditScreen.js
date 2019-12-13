@@ -503,10 +503,17 @@ class EditScreen extends Component {
                                 Save and Close
                             </Button>
                         </Link>
-    
-                        <Button className="cancel" theme="danger" onClick={this.handleCancel}>
+
+                        <Button className="cancel" theme="secondary" onClick={this.handleCancel}>
                             Cancel
                         </Button>
+
+                        <Link to="/">
+                            <Button className="close_without_saving" theme="danger">
+                                Close without saving
+                            </Button>
+                        </Link>
+    
                     </ModalBody>
                 </Modal>
 
