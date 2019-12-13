@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
-import { Container } from 'shards-react';
 import DraggableContainer from './DraggableContainer.js';
 import DraggableButton from './DraggableButton.js';
 import DraggableLabel from './DraggableLabel.js';
@@ -19,26 +18,45 @@ class WireframeCanvas extends Component {
         if (!this.state.selectionClick) {
           // attach/remove event handler
           document.addEventListener('click', this.handleOutsideClick, false);
+
+            //test
+            this.setState(prevState => ({
+                ...prevState,
+                selectionClick: true,
+            }));
+            
         } else {
-          document.removeEventListener('click', this.handleOutsideClick, false);
+
         }
-    
-        this.setState(prevState => ({
-           selectionClick: !prevState.selectionClick,
-        }));
 
         console.log(this.state.selectionClick ? "outside" : "inside");
     }
       
     handleOutsideClick = (e) => {
-    // ignore clicks on the component itself
+    // ignore clicks on the OUTER component
         if (this.node.contains(e.target)) {
-            console.log(this.state.selectionClick ? "outside" : "inside");
+            console.log("UNSELECT");
 
-          return;
+            this.props.handleUnselect();
+            //REMOVE EVENT HANDLER
+            document.removeEventListener('click', this.handleOutsideClick, false);
+            this.setState(prevState => ({
+                ...prevState,
+                selectionClick: !prevState.selectionClick,
+            }));
+            
+            return;
         }
-        
+    //ELSE IF IT IS NOT ON THE OUTER COMPONENT    
         this.handleSelectionClick();
+    }
+
+    checkSelected = (item) =>
+    {
+        if(this.props.selected === item.key)
+            return true;
+        else
+            return false;
     }
 
     render() {
@@ -61,7 +79,7 @@ class WireframeCanvas extends Component {
                                     handleInsideClick={this.handleSelectionClick}
                                     handleResize={this.props.handleResize}
                                     handleReposition={this.props.handleReposition}
-                                    selected={true}
+                                    selected={this.checkSelected(item)}
                                 />
                                 );
                         case "Button":
@@ -72,7 +90,7 @@ class WireframeCanvas extends Component {
                                     handleInsideClick={this.handleSelectionClick}
                                     handleResize={this.props.handleResize}
                                     handleReposition={this.props.handleReposition}
-                                    selected={true}
+                                    selected={this.checkSelected(item)}
                                 />
                                 );
                         case "Label":
@@ -83,7 +101,7 @@ class WireframeCanvas extends Component {
                                     handleInsideClick={this.handleSelectionClick}
                                     handleResize={this.props.handleResize}
                                     handleReposition={this.props.handleReposition}
-                                    selected={true}
+                                    selected={this.checkSelected(item)}
                                 />
                                 );
                         case "Textfield":
@@ -94,7 +112,7 @@ class WireframeCanvas extends Component {
                                     handleInsideClick={this.handleSelectionClick}
                                     handleResize={this.props.handleResize}
                                     handleReposition={this.props.handleReposition}
-                                    selected={true}
+                                    selected={this.checkSelected(item)}
                                 />
                                 );
                         }

@@ -7,7 +7,9 @@ import { getFirestore } from 'redux-firestore';
 
 import { FormInput, Button, Container, Col, Row , Card, Modal, ModalHeader, ModalBody} from "shards-react";
 import { SketchPicker } from 'react-color';
+import KeyboardEventHandler from 'react-keyboard-event-handler';
 import WireframeCanvas from './WireframeCanvas.js';
+
 
 class EditScreen extends Component {
     state = {
@@ -35,6 +37,7 @@ class EditScreen extends Component {
         borderColor: "",
         fontColor: "",
     }
+
 
     //LEFT SIDE
     handleZoomIn = () => {
@@ -65,13 +68,9 @@ class EditScreen extends Component {
     handleSaveAndClose = () =>
     {
         //Saving code
-
+        this.handleSave();
         //Close code
-        this.setState(
-            {
-                showModal: false
-            }
-        );
+        this.handleCancel();
     }
 
     handleCancel = () =>
@@ -81,6 +80,127 @@ class EditScreen extends Component {
                 showModal: false
             }
         );
+    }
+
+    handleCreateSampleContainer = () => {
+        const length = this.state.wireframe.elements.length;
+        var newWireframe = this.state.wireframe;
+        var newItem = {
+            key: length,
+            type: "Container",
+            width: 200,
+            height: 100,
+            x: 0,
+            y: 0,
+            backgroundColor: "#FFFFFF",
+            borderColor: "#f0f",
+            borderRadius: 10,
+            borderThickness: 3
+        };
+
+        newWireframe.elements.push(newItem); 
+        
+        this.setState(state=>(
+            {
+                ...state,
+                wireframe: newWireframe
+            })
+        );
+    }
+
+    handleCreateSampleButton = () => {
+        const length = this.state.wireframe.elements.length;
+        var newWireframe = this.state.wireframe;
+        var newItem = {
+            key: length,
+            type: "Button",
+            text: "Submit",
+            width: 75,
+            height: 40,
+            x: 0,
+            y: 0,
+            fontSize: 10,
+            backgroundColor: "#FFFFFF",
+            borderColor: "#000000",
+            fontColor: "#000000",
+            borderRadius: 5,
+            borderThickness: 3
+        };
+
+        newWireframe.elements.push(newItem); 
+        
+        this.setState(state=>(
+            {
+                ...state,
+                wireframe: newWireframe
+            })
+        );
+    }
+
+    handleCreateSampleLabel = () => {
+        const length = this.state.wireframe.elements.length;
+        var newWireframe = this.state.wireframe;
+        var newItem = {
+            key: length,
+            type: "Label",
+            text: "Label",
+            width: 75,
+            height: 40,
+            x: 0,
+            y: 0,
+            fontSize: 10,
+            backgroundColor: "#FFFFFF",
+            borderColor: "#000000",
+            fontColor: "#000000",
+            borderRadius: 5,
+            borderThickness: 3
+        };
+
+        newWireframe.elements.push(newItem); 
+        
+        this.setState(state=>(
+            {
+                ...state,
+                wireframe: newWireframe
+            })
+        );
+    }
+
+    handleCreateSampleTextfield = () => {
+        const length = this.state.wireframe.elements.length;
+        var newWireframe = this.state.wireframe;
+        var newItem = {
+            key: length,
+            type: "Textfield",
+            text: "Textfield",
+            width: 75,
+            height: 40,
+            x: 0,
+            y: 0,
+            fontSize: 10,
+            backgroundColor: "#888888",
+            borderColor: "#000000",
+            fontColor: "#000000",
+            borderRadius: 5,
+            borderThickness: 3
+        };
+
+        newWireframe.elements.push(newItem); 
+        
+        this.setState(state=>(
+            {
+                ...state,
+                wireframe: newWireframe
+            })
+        );
+    }
+
+    handleDuplicateControl = (key, e) => {
+
+    }
+
+    handleDeleteControl = (key, e) => {
+        
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +213,8 @@ class EditScreen extends Component {
 
     //Right Side
 
-    setShowBackground = () => {
+    setShowBackground = (e) => {
+        e.stopPropagation();
         this.setState(
             {
                 showColorPickerBackground: !this.state.showColorPickerBackground
@@ -101,7 +222,8 @@ class EditScreen extends Component {
         )
     }
 
-    setShowBorder = () => {
+    setShowBorder = (e) => {
+        e.stopPropagation();
         this.setState(
             {
                 showColorPickerBorder: !this.state.showColorPickerBorder
@@ -109,7 +231,8 @@ class EditScreen extends Component {
         )
     }
 
-    setShowFontColor = () => {
+    setShowFontColor = (e) => {
+        e.stopPropagation();
         this.setState(
             {
                 showColorPickerFont: !this.state.showColorPickerFont
@@ -136,6 +259,17 @@ class EditScreen extends Component {
         );
 
         console.log(this.state.selected);
+    }
+
+    handleUnselect = (item) =>
+    {
+        this.setState(state=>(
+            {
+                ...state,
+                selected: -1,
+                type: "",
+            }
+        ))
     }
 
     handleResize = (e, direction, ref, delta, position) =>
@@ -196,8 +330,6 @@ class EditScreen extends Component {
         
         console.log(this.state.wireframe.elements);
     }
-
-    //REDO ALL OF THESE CHANGE
 
     handleChangeCompleteBackground = (color) => {
 
@@ -270,7 +402,18 @@ class EditScreen extends Component {
 	        return <React.Fragment />;
 
         return (
+            
             <Container className="edit_container">
+                <KeyboardEventHandler
+                handleKeys={['ctrl+d']}
+                onKeyEvent={(key, e) => this.handleDuplicateControl(key,e)} 
+                />
+
+                <KeyboardEventHandler
+                handleKeys={['del']}
+                onKeyEvent={(key, e) => this.handleDeleteControl(key,e)} 
+                />
+
                 <Modal open={this.state.showModal}>
                     <ModalHeader>
                         Are you sure you want to quit without saving?
@@ -323,7 +466,7 @@ class EditScreen extends Component {
                             <hr className="new1"/>
 
                             <div className="sample_wrapper">
-                                <Container className="sample_container"/>
+                                <Container className="sample_container" onClick={this.handleCreateSampleContainer}/>
                                 <label htmlFor="sample_container container" className="label_for_sample">
                                     Container
                                 </label>
@@ -333,14 +476,14 @@ class EditScreen extends Component {
                                 <label htmlFor="sample_label" className="black-text label_for_sample">
                                     Prompt for Input:
                                 </label>
-                                <div className="sample_label">
+                                <div className="sample_label" onClick={this.handleCreateSampleLabel}>
                                     Label
                                 </div>
                             </div>
 
                             <div className="sample_wrapper_button">
                                 <div>
-                                    <Button className="sample_button">
+                                    <Button className="sample_button" onClick={this.handleCreateSampleButton}>
                                         Submit
                                     </Button>
                                 </div>
@@ -349,9 +492,15 @@ class EditScreen extends Component {
                                 </label>
                             </div>
 
-                            <div className="sample_wrapper_button">
+                            <div className="sample_wrapper_textfield">
                                 <div>
-                                    <input type="filler" className="sample_input" value="Input" readOnly></input>
+                                    <input 
+                                    type="filler" 
+                                    className="sample_input" 
+                                    value="Input" 
+                                    readOnly
+                                    onClick={this.handleCreateSampleTextfield}
+                                    ></input>
                                 </div>
                                 <label className="label_for_sample">
                                     Textfield
@@ -370,6 +519,8 @@ class EditScreen extends Component {
                         handleChangeType={this.handleChangeType}
                         handleResize={this.handleResize}
                         handleReposition={this.handleReposition}
+                        handleUnselect={this.handleUnselect}
+                        selected={this.state.selected}
                         />
                     </Col>
 

@@ -14,14 +14,6 @@ class DraggableLabel extends React.Component {
         
         this.props.handleInsideClick();
 
-        if(this.state.selected === false)
-        {
-            this.setState(
-                {
-                    selected: !this.state.selected
-                }
-            );
-        }
     }
 
     handleDrag = (e,d) =>
@@ -31,7 +23,7 @@ class DraggableLabel extends React.Component {
 
     handleResize = (e, direction, ref, delta, position) =>
     {
-        if(this.state.selected)
+        if(this.props.selected)
         {
             this.props.handleResize(e, direction, ref, delta, position);
         }
@@ -51,9 +43,9 @@ class DraggableLabel extends React.Component {
               onResize={this.handleResize}
               onDrag={this.handleDrag}
               onClick={this.handleClick}
-              disableDragging={!this.state.selected}
+              disableDragging={!this.props.selected}
 
-              enableResizing={this.state.selected ? 
+              enableResizing={this.props.selected ? 
                     {
                         bottom: true,
                         bottomLeft: true,
@@ -97,7 +89,7 @@ class DraggableLabel extends React.Component {
                 
                 {/*Squares for resizing*/}
                 <span 
-                style={{visibility: this.state.selected ? "visible":"hidden"}}>
+                style={{visibility: this.props.selected ? "visible":"hidden"}}>
                     <div 
                         className="bottom_left_square" 
                         style={{

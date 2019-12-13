@@ -225,6 +225,24 @@
                     "borderThickness": 3
                 }
             ]
+        },
+        {
+            "key": 3,
+            "name": "test",
+            "elements": [
+                {
+                    "key": 0,
+                    "type": "Container",
+                    "width": 200,
+                    "height": 100,
+                    "x": 0,
+                    "y": 0,
+                    "backgroundColor": "#FFFFFF",
+                    "borderColor": "#f0f",
+                    "borderRadius": 10,
+                    "borderThickness": 3
+                }
+            ]
         }
     ]
 }

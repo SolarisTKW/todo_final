@@ -3,7 +3,6 @@ import { Rnd } from 'react-rnd';
 
 class DraggableButton extends React.Component {
     state = {
-        selected: this.props.selected,
         data: this.props.item,
     }
     
@@ -13,15 +12,6 @@ class DraggableButton extends React.Component {
         this.props.handleChangeType(this.state.data);
         
         this.props.handleInsideClick();
-
-        if(this.state.selected === false)
-        {
-            this.setState(
-                {
-                    selected: !this.state.selected
-                }
-            );
-        }
     }
 
     handleDrag = (e,d) =>
@@ -31,7 +21,7 @@ class DraggableButton extends React.Component {
 
     handleResize = (e, direction, ref, delta, position) =>
     {
-        if(this.state.selected)
+        if(this.props.selected)
         {
             this.props.handleResize(e, direction, ref, delta, position);
         }
@@ -51,9 +41,9 @@ class DraggableButton extends React.Component {
               onResize={this.handleResize}
               onDrag={this.handleDrag}
               onClick={this.handleClick}
-              disableDragging={!this.state.selected}
+              disableDragging={!this.props.selected}
 
-              enableResizing={this.state.selected ? 
+              enableResizing={this.props.selected ? 
                     {
                         bottom: true,
                         bottomLeft: true,
@@ -97,7 +87,7 @@ class DraggableButton extends React.Component {
                 
                 {/*Squares for resizing*/}
                 <span 
-                style={{visibility: this.state.selected ? "visible":"hidden"}}>
+                style={{visibility: this.props.selected ? "visible": "hidden"}}>
                     <div 
                         className="bottom_left_square" 
                         style={{

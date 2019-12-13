@@ -54,10 +54,6 @@ hr.new2 {
   font-family:Roboto Mono,monospace
 }
 
-.edit_panel.container {
-  
-}
-
 .color_picker_circle{
   font-size: 8px;
   color: #FFFFFF;
@@ -115,9 +111,6 @@ hr.new2 {
   color: #000000;
 }
 
-.sample_button{
-  
-}
 
 .save_and_close
 {
