@@ -4,6 +4,8 @@
         {
             "key": 0,
             "name": "My 316 Wireframe",
+            "width": "780px",
+            "height": "850px",
             "elements": [
                 {
                     "key": 0,
@@ -67,6 +69,8 @@
         {
             "key": 1,
             "name": "My 316 Test",
+            "width": "780px",
+            "height": "850px",
             "elements": [
                 {
                     "key": 0,
@@ -178,6 +182,8 @@
         {
             "key": 2,
             "name": "My 316 Boots",
+            "width": "780px",
+            "height": "850px",
             "elements": [
                 {
                     "key": 0,
@@ -229,6 +235,8 @@
         {
             "key": 3,
             "name": "test",
+            "width": "780px",
+            "height": "850px",
             "elements": [
                 {
                     "key": 0,

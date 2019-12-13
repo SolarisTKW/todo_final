@@ -27,6 +27,8 @@ class DatabaseTester extends React.Component {
             fireStore.collection('wireframeItems').add({
                     key: wireframeItem.key,
                     name: wireframeItem.name,
+                    width: wireframeItem.width,
+                    height: wireframeItem.height,
                     elements: wireframeItem.elements,
                     time: x.getTime(),
                 }).then(() => {

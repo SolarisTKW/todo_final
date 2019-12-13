@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
 
-import { FormInput, Button, Container, Col, Row , Card, Modal, ModalHeader, ModalBody} from "shards-react";
+import { Form, FormInput, Button, Container, Col, Row , Card, Modal, ModalHeader, ModalBody} from "shards-react";
 import { SketchPicker } from 'react-color';
 import KeyboardEventHandler from 'react-keyboard-event-handler';
 import WireframeCanvas from './WireframeCanvas.js';
@@ -16,12 +16,12 @@ class EditScreen extends Component {
         //General
         wireframe: this.props.wireframe, //initialize
         selected: -1,
-        width: 780,
-        height: 850,
 
         //Left
         saved: false,
         showModal: false,
+        width: this.props.wireframe.width,
+        height: this.props.wireframe.height,
 
         //Center
         selectionClick: false,
@@ -244,6 +244,38 @@ class EditScreen extends Component {
             console.log(this.state.wireframe.elements);
         }
     }
+
+    changeWidth = (e) => {
+        const {target} = e;
+        
+        var newWireframe = this.state.wireframe;
+        newWireframe.width = target.value;
+
+        this.setState(
+            {
+                ...this.state,
+                // [target.id]: target.value,
+
+                wireframe: newWireframe
+            }
+        );
+    }
+
+    changeHeight = (e) => {
+        const {target} = e;
+        
+        var newWireframe = this.state.wireframe;
+        newWireframe.height = target.value;
+
+        this.setState(
+            {
+                ...this.state,
+                // [target.id]: target.value,
+
+                wireframe: newWireframe
+            }
+        );
+    }
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -364,7 +396,7 @@ class EditScreen extends Component {
         this.setState(
             {
                 ...this.state,
-                [target.id]: target.value,
+                // [target.id]: target.value,
 
                 wireframe: newWireframe
             }
@@ -557,20 +589,36 @@ class EditScreen extends Component {
                                 </label>
                             </div>
 
-                            
                             <div className="width_textfield_wrapper">
                                 <label className="label_for_sample" htmlFor="width_textfield">
-                                    width
+                                    Width
                                 </label>
                                 <input 
                                     type="text" 
                                     className="width_textfield" 
-                                    value={this.state.width} 
+                                    value={this.state.wireframe.width}
+                                    onChange={this.changeWidth}
                                 />
                             </div>
-                            
+                                
+                            <div className="height_textfield_wrapper">
+                                <label className="label_for_sample" htmlFor="height_textfield">
+                                    Height
+                                </label>
+                                <input 
+                                     type="text" 
+                                    className="height_textfield" 
+                                    value={this.state.wireframe.height} 
+                                    onChange={this.changeHeight}
+                                />
+                            </div>
 
-                            1/3
+                            <div className="submit_dimensions_wrapper">
+                                <Button type="submit"> 
+                                    Submit Changes
+                                </Button>
+                            </div>
+
                         </Card>
                     </Col>
 
